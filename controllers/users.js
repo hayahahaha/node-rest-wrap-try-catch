@@ -1,23 +1,22 @@
 // const { wrap } = require("./wrap");
 const axios = require("axios");
-const url = "https://jsonplaceholder.typicode.com/todos1";
+const url = "https://jsonplaceholder.typicode.com/todos";
 
-const wrap = (fn) => (req, res, next) => {
+const wrap = (fn) => async (req, res, next) => {
   try {
     console.log('wrap');
-    fn(req, res, next);
+    await fn(req, res, next);
     console.log('wrap');
   } catch (error) {
     console.log('error: error')
-    res.send({
-      message : error.message
-    });
+    res.status(400).send({ msg: error.message });
   }
 };
 
 const getUser = wrap(async (req, res, next) => {
   console.log('get uSer');
   const users = await axios.get(url);
+  console.log('get errir');
   res.json({
     data: users.data,
   });
